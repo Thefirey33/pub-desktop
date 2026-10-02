@@ -4,6 +4,8 @@ using Aspire.Hosting.Publishing;
 #pragma warning disable ASPIREDOCKERFILEBUILDER001
 var builder = DistributedApplication.CreateBuilder(args);
 
+var compose = builder.AddDockerComposeEnvironment("compose");
+
 var primaryMachine = builder.AddDockerfileBuilder("primarymachine", "../vm-init", context => {
         var runner = SetupInitialDockerStage(context);
         runner.Copy("primaryVM.sh", ".");
