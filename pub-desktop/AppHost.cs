@@ -1,5 +1,6 @@
 using Aspire.Hosting.ApplicationModel.Docker;
-
+using Aspire.Hosting.Publishing;
+#pragma warning disable ASPIREPIPELINES003
 #pragma warning disable ASPIREDOCKERFILEBUILDER001
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -9,11 +10,14 @@ var primaryMachine = builder.AddDockerfileBuilder("primarymachine", "../vm-init"
         runner.Run("chmod +x ./primaryVM.sh");
         runner.Entrypoint(["sh", "./primaryVM.sh"]);
 })
+
+.WithContainerBuildOptions(options => options.TargetPlatform = ContainerTargetPlatform.LinuxArm64)
 .WithBindMount("../vm-init/iso/VM1.iso", "/data/VM1.iso")
 .WithVolume("primary-machine-volume", "/data")
 .WithHttpEndpoint(targetPort: 6080);
 
 var frontend = builder.AddProject<Projects.pub_desktop_frontend>("frontend")
+    .WithContainerBuildOptions(options => options.TargetPlatform = ContainerTargetPlatform.LinuxArm64)
     .WithEnvironment("CLIENT_ID", builder.AddParameter("client-id", true))
     .WithEnvironment("CLIENT_SECRET", builder.AddParameter("client-secret", true))
     .WithExternalHttpEndpoints()
