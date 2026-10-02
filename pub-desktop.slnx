@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="pub-desktop.frontend/pub-desktop.frontend.csproj" />
+  <Project Path="pub-desktop.ServiceDefaults/pub-desktop.ServiceDefaults.csproj" />
+  <Project Path="pub-desktop/pub-desktop.csproj" />
+</Solution>

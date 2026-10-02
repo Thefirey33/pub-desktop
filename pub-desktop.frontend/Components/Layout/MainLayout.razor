@@ -1,0 +1,38 @@
+﻿@using System.Reflection
+@using Microsoft.AspNetCore.Components.Authorization
+@inherits LayoutComponentBase
+
+<HeadContent>
+    <link rel="icon" href="@Assets["favicon.ico"]"/>
+</HeadContent>
+
+<PageTitle>The Public Virtual Machine</PageTitle>
+
+<div class="background-fade"></div>
+
+<div class="maximum-width">
+    <h1 class="centered-title">Thefirey33 Experiments: The Public Virtual Machine</h1>
+    <p>
+        The Public Virtual Machine is a virtual machine that anyone can access! Powered by QEMU and noVNC,
+        this is a VM that is always online 24/7! Think of r/place, but... with an operating system!
+    </p>
+
+    @Body
+    
+    <footer class="centered-title">
+        <p>
+            This is an experimental service provided by <NavLink href="https://thefirey33.net">thefirey33</NavLink>
+        </p>
+        
+        <em>
+            Version: @Assembly.GetExecutingAssembly().GetName().Version
+        </em>
+        
+    </footer>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
