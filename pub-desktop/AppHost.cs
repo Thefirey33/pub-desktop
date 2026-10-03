@@ -25,6 +25,7 @@ var primaryMachine = builder.AddDockerfileBuilder("primarymachine", "../vm-init"
 var spoofDpiProxy = builder
     .AddContainer("proxy", "ghcr.io/unmedius/spoof-dpi", "latest")
     .WithHttpEndpoint(targetPort: 8080, env: "PROXY_PORT", name: "PROXY")
+    .WithLifetime(ContainerLifetime.Persistent)
     .PublishAsDockerComposeService((_, service) =>
         {
             service.Restart = "unless-stopped";
