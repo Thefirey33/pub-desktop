@@ -18,13 +18,13 @@ var primaryMachine = builder.AddDockerfileBuilder("primarymachine", "../vm-init"
     service.Privileged = true;
 })
 .WithBindMount("../vm-init/iso/VM1.iso", "/data/VM1.iso")
-.WithVolume("primary-machine-volume", "/data")
+.WithVolume("primary-machine", "/data")
 .WithHttpEndpoint(targetPort: 6080);
 
 // This is to avoid any governmental filtering on Ralsei.
 var spoofDpiProxy = builder
     .AddContainer("proxy", "ghcr.io/unmedius/spoof-dpi", "latest")
-    .WithHttpEndpoint(8080, 8080, env: "PROXY_PORT", name: "PROXY")
+    .WithHttpEndpoint(targetPort: 8080, env: "PROXY_PORT", name: "PROXY")
     .PublishAsDockerComposeService((_, service) =>
         {
             service.Restart = "unless-stopped";
