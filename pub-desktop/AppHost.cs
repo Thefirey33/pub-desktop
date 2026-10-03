@@ -28,7 +28,6 @@ var spoofDpiProxy = builder
     .PublishAsDockerComposeService((_, service) =>
         {
             service.Restart = "unless-stopped";
-            service.Ports = ["8080:8080"];
         }
     );
 
