@@ -12,6 +12,11 @@ var primaryMachine = builder.AddDockerfileBuilder("primarymachine", "../vm-init"
         runner.Run("chmod +x ./primaryVM.sh");
         runner.Entrypoint(["sh", "./primaryVM.sh"]);
 })
+.PublishAsDockerComposeService((resource, service) =>
+{
+    service.Devices = ["/dev/kvm:/dev/kvm"];
+    service.Privileged = true;
+})
 .WithBindMount("../vm-init/iso/VM1.iso", "/data/VM1.iso")
 .WithVolume("primary-machine-volume", "/data")
 .WithHttpEndpoint(targetPort: 6080);
