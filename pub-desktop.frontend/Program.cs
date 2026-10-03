@@ -1,3 +1,4 @@
+using System.Net;
 using AspNet.Security.OAuth.Discord;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using pub_desktop.frontend.Components;
@@ -45,6 +46,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = DiscordAuthenticationDefaults.AuthenticationScheme;
+    
 })
 .AddCookie(options =>
 {
@@ -54,6 +56,12 @@ builder.Services.AddAuthentication(options =>
 {
     options.ClientId = Environment.GetEnvironmentVariable("CLIENT_ID")!;
     options.ClientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET")!;
+    
+    options.BackchannelHttpHandler = new HttpClientHandler
+    {
+        UseProxy = true,
+        Proxy = new WebProxy(Environment.GetEnvironmentVariable("PROXY_PROXY"))
+    };
     
     options.Scope.Add("identify");
     options.SaveTokens = true;

@@ -21,9 +21,21 @@ var primaryMachine = builder.AddDockerfileBuilder("primarymachine", "../vm-init"
 .WithVolume("primary-machine-volume", "/data")
 .WithHttpEndpoint(targetPort: 6080);
 
+// This is to avoid any governmental filtering on Ralsei.
+var spoofDpiProxy = builder
+    .AddContainer("proxy", "ghcr.io/unmedius/spoof-dpi", "latest")
+    .WithHttpEndpoint(8080, 8080, env: "PROXY_PORT", name: "PROXY")
+    .PublishAsDockerComposeService((_, service) =>
+        {
+            service.Restart = "unless-stopped";
+            service.Ports = ["8080:8080"];
+        }
+    );
+
 var frontend = builder.AddProject<Projects.pub_desktop_frontend>("frontend")
     .WithEnvironment("CLIENT_ID", builder.AddParameter("client-id", true))
     .WithEnvironment("CLIENT_SECRET", builder.AddParameter("client-secret", true))
+    .WithReference(spoofDpiProxy.GetEndpoint("PROXY"))
     .WithExternalHttpEndpoints()
     .WithHttpEndpoint(8080)
     .WithReference(primaryMachine.GetEndpoint("http"));
